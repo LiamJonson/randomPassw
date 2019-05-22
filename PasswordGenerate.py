@@ -1,5 +1,8 @@
 import random
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtCore
+from PyQt5 import QtGui
+from PyQt5.QtWidgets import (QWidget, QLabel,
+    QLineEdit, QApplication)
 import sys
 
 
@@ -18,16 +21,34 @@ print(genPas(10))
 
 
 
-#app =QtWidgets.QApplication(sys.argv)
-#window = QtWidgets.QWidget()
-#window.setWindowTitle('Generation Password')
-#window.resize(300, 70)
-#label = QtWidgets.QLabel(print(genPas(10)))
-#btnQuit = QtWidgets.QPushButton('&Закрыть')
-#vbox =QtWidgets.QVBoxLayout()
-#vbox.addWidget(label)
-#vbox.addWidget(btnQuit)
-#window.setLayout(vbox)
-#btnQuit.clicked.connect(app.quit)
-#window.show()
-#sys.exit(app.exec_())
+class MyWindow(QtWidgets.QWidget):
+    def __init__(self,parent=None):
+        QtWidgets.QWidget.__init__(self, parent)
+        self.label = QtWidgets.QLabel('vvvvvvvvvvvvvvvvvv')
+        self.label.setAlignment(QtCore.Qt.AlignHCenter)
+        self.btnQuit = QtWidgets.QPushButton('&Закрыть')
+        self.button = QtWidgets.QPushButton('&Изменить') #///////////
+        self.vbox = QtWidgets.QVBoxLayout()
+        self.vbox.addWidget(self.label)
+        self.vbox.addWidget(self.button)
+        self.vbox.addWidget(self.btnQuit)
+        self.setLayout(self.vbox)
+        self.btnQuit.clicked.connect(QtWidgets.qApp.quit)
+        self.button.clicked.connect(self.on_clicked) #//////////////
+    def on_clicked(self):                      #///////
+            self.label.setText(genPas())  #///////
+            self.button.setDisabled(False)          #//////
+
+
+
+if __name__ == '__main__':
+    app = QtWidgets.QApplication(sys.argv)
+    window = MyWindow()
+    window.setWindowTitle('Generation Password')
+    window.resize(300, 70)
+    window.show()
+    sys.exit(app.exec_())
+
+
+
+
