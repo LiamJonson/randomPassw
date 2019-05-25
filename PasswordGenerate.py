@@ -24,20 +24,25 @@ print(genPas(10))
 class MyWindow(QtWidgets.QWidget):
     def __init__(self,parent=None):
         QtWidgets.QWidget.__init__(self, parent)
-        self.label = QtWidgets.QLabel('vvvvvvvvvvvvvvvvvv')
+        self.label = QtWidgets.QLabel('нет значения')
         self.label.setAlignment(QtCore.Qt.AlignHCenter)
         self.btnQuit = QtWidgets.QPushButton('&Закрыть')
         self.button = QtWidgets.QPushButton('&Изменить') #///////////
+        self.butAlter = QtWidgets.QSpinBox()
         self.vbox = QtWidgets.QVBoxLayout()
         self.vbox.addWidget(self.label)
+        self.vbox.addWidget(self.butAlter)
         self.vbox.addWidget(self.button)
         self.vbox.addWidget(self.btnQuit)
         self.setLayout(self.vbox)
         self.btnQuit.clicked.connect(QtWidgets.qApp.quit)
         self.button.clicked.connect(self.on_clicked) #//////////////
     def on_clicked(self):                      #///////
-            self.label.setText(genPas())  #///////
-            self.button.setDisabled(False)          #//////
+        self.p = self.butAlter.text()
+        self.label.setText(genPas(int(self.p)))#////////////
+        self.button.setDisabled(False)          #//////
+
+
 
 
 
