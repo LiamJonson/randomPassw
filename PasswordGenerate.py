@@ -1,59 +1,46 @@
 import random
+from PyQt5.QtWidgets import (QWidget, QPushButton, QLineEdit,
+   QInputDialog, QApplication)
 from PyQt5 import QtWidgets, QtCore
-from PyQt5 import QtGui
-from PyQt5.QtWidgets import (QWidget, QLabel,
-    QLineEdit, QApplication)
+from PyQt5.QtCore import Qt
 import sys
-
-
 num = 0
 def genPas(long_pas=8):
-    d = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
-         'w', 'x', 'y', 'z','A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
-          'W', 'X', 'Y', 'Z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '@', '_', '*', '$', '!']
-    passw = []
-    for i in range(long_pas):
-        passw.append(random.choice(d))
-
-    return ''.join(passw)
-
-print(genPas(10))
-
-
+   d = '1234567890abcdefghigklmnopqrstuvyxwzABCDEFGHIGKLMNOPQRSTUVYXWZ!@#$%^&*()-=_?'
+   passw = ''.join([random.choice(d) for x in range(long_pas)])
+   return ''.join(passw)
 
 class MyWindow(QtWidgets.QWidget):
-    def __init__(self,parent=None):
-        QtWidgets.QWidget.__init__(self, parent)
-        self.label = QtWidgets.QLabel('нет значения')
-        self.label.setAlignment(QtCore.Qt.AlignHCenter)
-        self.btnQuit = QtWidgets.QPushButton('&Закрыть')
-        self.button = QtWidgets.QPushButton('&Изменить') #///////////
-        self.butAlter = QtWidgets.QSpinBox()
-        self.vbox = QtWidgets.QVBoxLayout()
-        self.vbox.addWidget(self.label)
-        self.vbox.addWidget(self.butAlter)
-        self.vbox.addWidget(self.button)
-        self.vbox.addWidget(self.btnQuit)
-        self.setLayout(self.vbox)
-        self.btnQuit.clicked.connect(QtWidgets.qApp.quit)
-        self.button.clicked.connect(self.on_clicked) #//////////////
-    def on_clicked(self):                      #///////
-        self.p = self.butAlter.text()
-        self.label.setText(genPas(int(self.p)))#////////////
-        self.button.setDisabled(False)          #//////
+    def __init__(self):
+       super().__init__()
+       self.iniUi()
+    def iniUi(self):
+       self.setWindowTitle('Generation Password')
+       self.label = QtWidgets.QLabel('нет значения')
+       self.version = QtWidgets.QLabel('v1.02')
+       self.version.setAlignment(QtCore.Qt.AlignRight)
+       self.label.setAlignment(QtCore.Qt.AlignHCenter)
+       self.btnQuit = QtWidgets.QPushButton('&Закрыть')
+       self.button = QtWidgets.QPushButton('&Изменить') #///////////
+       self.butAlter = QtWidgets.QSpinBox()
+       self.vbox = QtWidgets.QVBoxLayout()
+       self.vbox.addWidget(self.label)
+       self.vbox.addWidget(self.butAlter)
+       self.vbox.addWidget(self.button)
+       #self.vbox.addWidget(self.btnQuit) #buttonExit
+       self.vbox.addWidget(self.version)
+       self.setLayout(self.vbox)
+       self.btnQuit.clicked.connect(QtWidgets.qApp.quit)
+       self.button.clicked.connect(self.on_clicked)
 
-
-
-
-
+    def on_clicked(self):
+       self.p = self.butAlter.text()
+       self.label.setText(genPas(int(self.p)))#////////////
+       self.button.setDisabled(False)          #//////
 if __name__ == '__main__':
-    app = QtWidgets.QApplication(sys.argv)
-    window = MyWindow()
-    window.setWindowTitle('Generation Password')
-    window.resize(300, 70)
-    window.show()
-    sys.exit(app.exec_())
-
-
-
+   app = QtWidgets.QApplication(sys.argv)
+   window = MyWindow()
+   window.resize(300, 50)
+   window.show()
+   sys.exit(app.exec_())
 
