@@ -65,6 +65,7 @@ class MyWindow(QtWidgets.QWidget):
        passw = genPas(int(self.slay.value()))
        print(passw)
        self.label.setText(passw)
+       self.labelSize.setText('Size='+str(len(passw)))
        print(type(passw))
        self.button.setDisabled(False)
        return
