@@ -54,17 +54,24 @@ class MyWindow(QtWidgets.QWidget):
 
 
     def on_clicked(self, *kwarg):
-        print('***********')
         self.passw = genPas(int(self.slay.value()))
         self.label.setText(self.passw)
         self.labelSize.setText('Size=' + str(len(self.passw)))
         self.button.setDisabled(False)
 
-    def send_to_clipboard(self,passw):
-        passw = self.passw
-        cl = QtWidgets.QApplication.clipboard()
-        cl.clear(mode=cl. Clipboard)
-        cl.setText(passw, mode=cl.Clipboard)
+    def send_to_clipboard(self):
+
+        try:
+            passw = self.passw
+            cl = QtWidgets.QApplication.clipboard()
+            cl.clear(mode=cl.Clipboard)
+            cl.setText(passw, mode=cl.Clipboard)
+        except:
+            print('Ошибка')
+
+
+
+
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
