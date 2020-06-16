@@ -4,8 +4,21 @@ import sys
 
 
 def genPas(long_pas=8):
-    d = '1234567890abcdefghigklmnopqrstuvyxwzABCDEFGHIGKLMNOPQRSTUVYXWZ!@#$%^&*()-=_?'
-    passw = ''.join([random.choice(d) for x in range(long_pas)])
+    d = '123456789abcdefghigklmnpqrstuvyxwzABCDEFGHIGKLMNPQRSTUVYXWZ!@#$%&*=_?'
+    passw = []
+    #if long_pas < 8:
+    #    return "Password length should be at least 8"
+    for i in range(long_pas):
+        k = random.choice(d)
+        if k.islower() not in passw or k.isupper() not in passw or k not in passw:
+            passw.append(k)
+        else:
+            long_pas +=1
+
+
+
+    #passw = ''.join([random.choice(d) for x in range(long_pas)])
+    print(''.join(passw))
     return ''.join(passw)
 
 
@@ -52,7 +65,6 @@ class MyWindow(QtWidgets.QWidget):
         self.btnclipb.clicked.connect(self.send_to_clipboard)
         self.show()
 
-
     def on_clicked(self, *kwarg):
         self.passw = genPas(int(self.slay.value()))
         self.label.setText(self.passw)
@@ -67,10 +79,7 @@ class MyWindow(QtWidgets.QWidget):
             cl.clear(mode=cl.Clipboard)
             cl.setText(passw, mode=cl.Clipboard)
         except:
-            print('Ошибка')
-
-
-
+            print('Ошибка')  # no window output
 
 
 if __name__ == '__main__':
