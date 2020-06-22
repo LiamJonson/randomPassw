@@ -33,14 +33,17 @@ class MyWindow(QtWidgets.QWidget):
         self.label = QtWidgets.QLabel('Enter value')
         self.labelSize = QtWidgets.QLabel('Size=')
         self.version = QtWidgets.QLabel('v1.05')
+
+
         self.version.setAlignment(QtCore.Qt.AlignRight)
         self.label.setAlignment(QtCore.Qt.AlignHCenter)
         self.labelSize.setAlignment(QtCore.Qt.AlignHCenter)
 
         self.btnQuit = QtWidgets.QPushButton('&Закрыть')
         self.btnclipb = QtWidgets.QPushButton('Copy')
-
         self.button = QtWidgets.QPushButton('&Generate')
+
+
         self.slay = QtWidgets.QSlider(QtCore.Qt.Horizontal)  # Slider
         self.slay.setRange(1, 20)  # Slider
         self.slay.setTickInterval(1)  # Slider
@@ -71,8 +74,13 @@ class MyWindow(QtWidgets.QWidget):
         self.labelSize.setText('Size=' + str(len(self.passw)))
         self.button.setDisabled(False)
 
-    def send_to_clipboard(self):
 
+    def truSaveclipboard(self,):
+        self.emersion = QtWidgets.QStatusBar(self)
+        self.emersion.showMessage("Saved", 500)
+        self.emersion.show()
+
+    def send_to_clipboard(self):
         try:
             passw = self.passw
             cl = QtWidgets.QApplication.clipboard()
