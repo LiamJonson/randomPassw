@@ -1,96 +1,52 @@
 import random
 from PyQt5 import QtWidgets, QtCore, QtGui
+from PyQt5.QtGui import QIcon
 import sys
+from PasGenG import Ui_PasswordGenerator
 
 
-def genPas(long_pas=8):
-    d = '123456789abcdefghigklmnpqrstuvyxwzABCDEFGHIGKLMNPQRSTUVYXWZ!@#$%&*=_?'
-    passw = []
-    #if long_pas < 8:
-    #    return "Password length should be at least 8"
-    for i in range(long_pas):
-        k = random.choice(d)
-        if k.islower() not in passw or k.isupper() not in passw or k not in passw:
-            passw.append(k)
-        else:
-            long_pas +=1
-
-
-
-    #passw = ''.join([random.choice(d) for x in range(long_pas)])
-    print(''.join(passw))
-    return ''.join(passw)
-
-
-class MyWindow(QtWidgets.QWidget):
+class MyWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
-        self.iniUi()
+        self.ui = Ui_PasswordGenerator()
+        self.ui.setupUi(self)
+        self.init_UI()
 
-    def iniUi(self):
-        self.setGeometry(500, 500, 300, 50)
-        self.setWindowTitle('Generation Password')
-        self.label = QtWidgets.QLabel('Enter value')
-        self.labelSize = QtWidgets.QLabel('Size=')
-        self.version = QtWidgets.QLabel('v1.05')
+    def init_UI(self):
+        self.setWindowTitle('Password Generator')
+        self.setWindowIcon(QIcon('simiographics-secure-padlock.ico'))
+        self.ui.horizontalSlider.valueChanged.connect(self.gener)
+        self.ui.ButtonBuffer.clicked.connect(self.clipboard)
+        self.ui.ButtonExit.clicked.connect(self.exit_out)
 
+    def genPas(self, long_pas=8):
+        d = '123456789abcdefghigklmnpqrstuvyxwzABCDEFGHIGKLMNPQRSTUVYXWZ!@#$%&*=_?'
+        passw = []
+        for i in range(long_pas):
+            k = random.choice(d)
+            if k.islower() not in passw or k.isupper() not in passw or k not in passw:
+                passw.append(k)
+            else:
+                long_pas += 1
+        return ''.join(passw)
 
-        self.version.setAlignment(QtCore.Qt.AlignRight)
-        self.label.setAlignment(QtCore.Qt.AlignHCenter)
-        self.labelSize.setAlignment(QtCore.Qt.AlignHCenter)
+    def gener(self):
+        new_value = self.ui.horizontalSlider.value()
+        self.passw = self.genPas(int(new_value))
+        self.ui.outputPas.setText(self.passw)
+        self.ui.ButtonExit.setDisabled(False)
+        print(self.passw)
 
-        self.btnQuit = QtWidgets.QPushButton('&Закрыть')
-        self.btnclipb = QtWidgets.QPushButton('Copy')
-        self.button = QtWidgets.QPushButton('&Generate')
-
-
-        self.slay = QtWidgets.QSlider(QtCore.Qt.Horizontal)  # Slider
-        self.slay.setRange(1, 20)  # Slider
-        self.slay.setTickInterval(1)  # Slider
-        self.slay.setTickPosition(QtWidgets.QSlider.TicksBelow)  # Slider
-
-        self.hbox = QtWidgets.QHBoxLayout()
-        self.hbox.addStretch(0)
-        self.hbox.addWidget(self.button, 4, QtCore.Qt.AlignHCenter)
-        self.hbox.addWidget(self.btnclipb, 4, QtCore.Qt.AlignHCenter)
-
-        self.vbox = QtWidgets.QVBoxLayout()
-        self.vbox.addStretch(0)
-        self.vbox.addWidget(self.labelSize)
-        self.vbox.addWidget(self.label)
-        self.vbox.addWidget(self.slay)
-        self.vbox.addLayout(self.hbox)
-        self.vbox.addWidget(self.version)
-
-        self.setLayout(self.vbox)
-        self.btnQuit.clicked.connect(QtWidgets.qApp.quit)
-        self.button.clicked.connect(self.on_clicked)
-        self.btnclipb.clicked.connect(self.send_to_clipboard)
-        self.show()
-
-    def on_clicked(self, *kwarg):
-        self.passw = genPas(int(self.slay.value()))
-        self.label.setText(self.passw)
-        self.labelSize.setText('Size=' + str(len(self.passw)))
-        self.button.setDisabled(False)
+    def clipboard(self):
+        cl = QtWidgets.QApplication.clipboard()
+        cl.clear(mode=cl.Clipboard)
+        cl.setText(self.passw, mode=cl.Clipboard)
+    def exit_out(self):
+        self.QCoreApplication.quit()
 
 
-    def truSaveclipboard(self,):
-        self.emersion = QtWidgets.QStatusBar(self)
-        self.emersion.showMessage("Saved", 500)
-        self.emersion.show()
+app = QtWidgets.QApplication(sys.argv)
+applic = MyWindow()
+applic.show()
 
-    def send_to_clipboard(self):
-        try:
-            passw = self.passw
-            cl = QtWidgets.QApplication.clipboard()
-            cl.clear(mode=cl.Clipboard)
-            cl.setText(passw, mode=cl.Clipboard)
-        except:
-            print('Ошибка')  # no window output
-
-
-if __name__ == '__main__':
-    app = QtWidgets.QApplication(sys.argv)
-    window = MyWindow()
-    sys.exit(app.exec_())
+sys.exit(app.exec_())
